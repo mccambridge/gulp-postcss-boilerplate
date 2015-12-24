@@ -1,0 +1,10 @@
+$blue: #0000ff;
+
+body {
+	background: #fff;
+}
+
+.test {
+	color: $blue;
+	transform: translateX(34px);
+}
