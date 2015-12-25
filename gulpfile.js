@@ -8,6 +8,8 @@ const rename 		= require('gulp-rename')
 const postcss		= require('gulp-postcss');
 const precss 		= require('precss');
 const autoprefixer  = require('autoprefixer');
+const lost			= require('lost');
+// ^^^ awesome places to start ^^^
 
 const njRender		= require('gulp-nunjucks-render');
 const nj 			= njRender.nunjucks;
@@ -33,6 +35,7 @@ gulp.task('scripts', () => {
 gulp.task('styles', () => {
 	const processors = [
 		precss(),
+		lost,
 		autoprefixer({browsers: ['last 2 versions']})
 	];
 	return gulp.src('src/styles/styles.css')
@@ -45,13 +48,19 @@ gulp.task('markup', () => {
 	return gulp.src('src/html/**/*.+(html|nj|nunjucks)')
 		.pipe(njRender())
 		.pipe(gulp.dest('dist'));
-})
+});
+
+gulp.task('images', () => {
+	return gulp.src('src/images/**/*.+(gif|jpg|png|svg)')
+		.pipe(gulp.dest('dist/images'));
+});
 
 gulp.task('watch', function() {
 	gulp.watch('src/templates/**/*.+(html|nj|nunjucks)', ['markup', reload]);
 	gulp.watch('src/html/**/*.+(html|nj|nunjucks)', ['markup', reload]);
 	gulp.watch('src/styles/**/*.css', ['styles', reload]);
 	gulp.watch(['src/scripts/**/*.js'], ['scripts', reload]);
+	gulp.watch(['src/images/**/*.+(gif|jpg|png|svg)'], ['images', reload]);
 	gulp.watch("*.html", reload);
 });
 
@@ -63,6 +72,6 @@ gulp.task('sync', function() {
 	});
 });
 
-gulp.task('server', ['markup', 'styles', 'sync', 'scripts', 'watch']);
+gulp.task('server', ['markup', 'styles', 'images', 'sync', 'scripts', 'watch']);
 
-gulp.task('default', ['markup', 'styles', 'scripts']);
+gulp.task('default', ['markup', 'styles', 'images', 'scripts']);

@@ -1,7 +1,8 @@
+$white: #fefefc;
 $blue: #0000ff;
 
 body {
-	background: #fff;
+	background: $white;
 }
 
 .test {
